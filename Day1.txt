@@ -1,0 +1,242 @@
+ 🌐 Frontend, Backend & API — Notes
+
+> A quick-reference guide covering Frontend, Backend, APIs, and Data Storage concepts.
+
+---
+
+ 📑 Table of Contents
+
+- [A. Frontend](#a-frontend)
+- [B. Backend](#b-backend)
+- [C. API (Application Programming Interface)](#c-api-application-programming-interface)
+- [D. Storage Areas](#d-storage-areas)
+- [E. File Management System vs DBMS](#e-file-management-system-vs-dbms)
+- [F. Interview Q&A](#f-interview-qa)
+
+
+A. Frontend
+
+**Frontend** is the visual and interactive layer of a website or application that users directly see and interact with through a web browser or mobile app.
+
+> 💡 Also called the **Client Side**, because it runs on the user's device (browser/mobile).
+
+ 🎯 Responsibilities
+
+- Displays web pages and user interface (UI)
+- Accepts user input (forms, buttons, search boxes)
+- Validates user input before sending it to the server
+- Calls Backend APIs to fetch or send data
+- Displays the response received from the backend
+- Provides animations and interactive effects
+- Ensures responsive design for mobile, tablet, and desktop devices
+
+ 🛠️ Common Technologies
+
+| Technology | Purpose |
+
+| HTML | Structure of the webpage |
+| CSS | Styling and layout |
+| JavaScript | Interactivity and dynamic behavior |
+| Bootstrap | Responsive UI framework |
+| React.js | JavaScript library for building UI |
+| Angular | Frontend framework |
+| Vue.js | Progressive JavaScript framework |
+| TypeScript | JavaScript with static typing |
+
+### 📄 Examples
+
+`Login page` · `Registration form` · `Shopping cart` · `Dashboard` · `Profile page` · `Online payment page`
+
+### ⚡ Real-Time Example — Login Flow
+
+```
+1. Frontend collects username and password.
+2. Sends them to the backend through an API.
+3. Waits for the response.
+4. Displays either:
+     ✅ Login Successful
+     ❌ Invalid Username/Password
+```
+
+---
+
+ B. Backend
+
+**Backend** is the server-side part of an application. Users cannot see it directly, but it performs all the business logic, security, data processing, and database operations.
+
+> 🧠 It acts as the **brain** of the application.
+
+ 🎯 Responsibilities
+
+- Processes client requests
+- Implements business logic
+- Connects with databases
+- Performs CRUD operations
+- Authenticates and authorizes users
+- Encrypts passwords and sensitive data
+- Generates reports
+- Sends emails and notifications
+- Handles file uploads/downloads
+- Returns responses to the frontend
+
+ 🛠️ Common Technologies
+
+| Technology | Purpose |
+
+| Java | Backend programming language |
+| Spring Boot | Java framework |
+| Node.js | JavaScript runtime |
+| Python (Django/Flask) | Backend development |
+| PHP | Web development |
+| .NET | Microsoft backend framework |
+| Go | High-performance backend |
+| Ruby on Rails | Rapid web development |
+
+ 🗄️ Databases Used
+
+`MySQL` · `PostgreSQL` · `Oracle` · `SQL Server` · `MongoDB` · `Firebase`
+
+⚡ Backend Task Example — Login
+
+```
+1. Receives username/password.
+2. Checks the database.
+3. Verifies password.
+4. Generates JWT Token or Session.
+5. Sends success/failure response.
+```
+
+ 🏦 Real-Time Example — Online Banking System
+
+- Checks account balance
+- Validates transaction
+- Transfers money
+- Updates database
+- Sends SMS/Email confirmation
+
+> All of this happens in the **backend**.
+
+---
+
+ C. API (Application Programming Interface)
+
+An **API** is a set of rules and protocols that allows two different applications or systems to communicate and exchange data — without exposing their internal implementation.
+
+> 🌉 It acts as a **bridge** between the Frontend and Backend, or between two different software systems.
+
+**Simple Definition:** `API = Communication Bridge`
+
+ 🍽️ Restaurant Analogy
+
+```
+You (Client)  →  gives order to Waiter (API)  →  Kitchen (Server) prepares food
+Kitchen       →  gives food to Waiter (API)    →  You receive your meal
+```
+
+ 🧩 Types of APIs
+
+| Type | Description | Example |
+|---|---|---|
+| REST API | Uses HTTP, most common | Weather app fetching data |
+| SOAP API | XML-based, used in banking | Net banking transactions |
+| GraphQL | Fetch only what you need | Facebook, GitHub |
+| WebSocket API | Real-time, two-way | WhatsApp, live scores |
+
+ ✈️ Real-Time Scenario — Booking a Flight (MakeMyTrip)
+
+1. MakeMyTrip doesn't own airline data.
+2. It calls IndiGo's API, Air India's API, etc.
+3. Each airline API returns available seats & prices.
+4. MakeMyTrip displays all results in one place.
+
+> 👀 You never saw the API — but it did all the connecting!
+
+
+ D. Storage Areas
+
+As part of our applications, we need to store data — customer information, billing information, call records, etc. To store this data, we need **storage areas**.
+
+There are **2 types** of storage areas:
+
+1. Temporary Storage Areas
+2. Permanent Storage Areas
+
+🕒 1. Temporary Storage Areas
+
+Memory areas where data is stored temporarily.
+
+> **Example:** All JVM memory areas (Heap Area, Stack Area, Method Area, PC Registers, Native Method Stacks). Once the JVM shuts down, all these memory areas are cleared automatically.
+
+ 💾 2. Permanent Storage Areas
+
+Also known as **persistent storage areas** — data here is stored permanently.
+
+> **Example:** File Systems, Databases, Data Warehouses, Big Data, etc.
+
+
+
+ 📁 File Management System (FMS)
+
+**Definition:** A system where data is stored in files on the operating system. Each application program must handle its own storage, retrieval, and updating. File systems are provided by the local operating system.
+
+> Best suited for storing **very small amounts of information** (KBs).
+>
+> **Example:** A library management system storing books in separate text files like `books.txt`, `members.txt`.
+
+ ⚠️ Limitations of FMS
+
+| # | Limitation | Description |
+
+| 1 | Data Redundancy | Same data stored in multiple files |
+| 2 | Data Inconsistency | Updates in one file may not reflect in another |
+| 3 | Poor Data Security | No proper access control |
+| 4 | Difficult Data Retrieval | Searching requires custom programs |
+| 5 | Integrity Issues | No constraints (e.g., roll number uniqueness) |
+| 6 | Scalability Issues | Hard to manage as data grows |
+
+> ➡️ To overcome these problems, we use **Databases**.
+
+
+
+ 🗃️ Database Management System (DBMS)
+
+**Definition:** A DBMS is a collection of programs that enables users to create, manage, and manipulate databases. It acts as an **interface** between the user and the database.
+
+ ✅ Advantages
+
+1. Can store huge amounts of information.
+2. Query language support available for every database — easy to perform operations.
+3. Requires username and password to access data → **data is secured**.
+4. Data is stored in tables. Following normalization techniques and constraints (Unique Key, Primary Key, etc.) prevents duplication → **no data inconsistency**.
+
+ ⚠️ Limitations
+
+1. Cannot efficiently store huge amounts of data (terabytes+).
+2. Only supports **structured** (tabular/relational) data — not semi-structured (XML) or unstructured data (video, audio, images).
+
+> ➡️ To overcome these problems, we use advanced storage systems like **Big Data** and **Data Warehouses**.
+
+
+
+ E. File Management System vs DBMS
+
+| # | File Management System (FMS) | Database Management System (DBMS) |
+
+| 1 | Data stored in separate files | Data stored in a structured database |
+| 2 | High data redundancy (duplicate data) | Reduces data redundancy |
+| 3 | Difficult to maintain and update | Easy to maintain and update |
+| 4 | Limited security | Strong security mechanisms |
+| 5 | Data sharing is difficult | Multiple users can access data simultaneously |
+| 6 | No relationship between files | Supports relationships between tables |
+| 7 | Backup and recovery are difficult | Provides backup and recovery features |
+| 8 | Data inconsistency may cause anomalies | Maintains data consistency and integrity |
+| 9 | Suitable for small applications | Suitable for small, medium, and large applications |
+
+
+
+ F. Interview Q&A
+
+Q: What is the difference between a File System and a DBMS?**
+
+> A file system stores data in separate files and may lead to data redundancy and security issues. A DBMS stores data in a structured manner using tables, reduces redundancy, provides security, supports multiple users, and ensures data consistency and integrity.
+
