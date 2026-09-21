@@ -1,0 +1,241 @@
+ Day 3 — ALTER TABLE: MODIFY, ADD, CHANGE, DROP, RENAME
+
+ Setup
+
+```sql
+USE PFS7;
+
+CREATE TABLE EMPLOYEES(
+    EMPID CHAR(5),
+    FNAME VARCHAR(100),
+    LNAME VARCHAR(60),
+    AGE INT,
+    DOJ DATE,
+    ADDRESS TINYTEXT,
+    DEPT VARCHAR(50)
+);
+```
+
+```
+mysql> DESC EMPLOYEES;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| EMPID   | char(5)      | YES  |     | NULL    |       |
+| FNAME   | varchar(100) | YES  |     | NULL    |       |
+| LNAME   | varchar(60)  | YES  |     | NULL    |       |
+| AGE     | int          | YES  |     | NULL    |       |
+| DOJ     | date         | YES  |     | NULL    |       |
+| ADDRESS | tinytext     | YES  |     | NULL    |       |
+| DEPT    | varchar(50)  | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+7 rows in set (0.04 sec)
+```
+
+
+
+ MODIFY a Column
+
+Syntax: `ALTER TABLE table-name MODIFY column-name datatype(size);`
+
+Modify `FNAME` to `VARCHAR(70)`:
+```sql
+ALTER TABLE EMPLOYEES MODIFY FNAME VARCHAR(70);
+```
+
+Modify `LNAME` to `VARCHAR(80)`:
+```sql
+ALTER TABLE EMPLOYEES MODIFY LNAME VARCHAR(80);
+```
+
+
+
+ ADD a Column
+
+Syntax: `ALTER TABLE table-name ADD column-name datatype(size);`
+
+Add a `LOCATION` column of type `TINYTEXT`:
+```sql
+ALTER TABLE EMPLOYEES ADD LOCATION TINYTEXT;
+```
+> Note: running this against a table name that doesn't exist (e.g. `EMPLOYEE` instead of `EMPLOYEES`) throws `ERROR 1146 (42S02): Table 'pfs3.employee' doesn't exist`.
+
+ Add a Column After a Particular Column
+
+Syntax: `ALTER TABLE table-name ADD column-name datatype AFTER specified-column-name;`
+
+Add `PFID` (INT) right after `ADDRESS`:
+```sql
+ALTER TABLE EMPLOYEES ADD PFID INT AFTER ADDRESS;
+```
+
+
+ RENAME a Column
+
+Syntax: `ALTER TABLE table-name CHANGE existing-column-name new-column-name datatype(size);`
+
+Rename `FNAME` → `FIRSTNAME`:
+```sql
+ALTER TABLE EMPLOYEES CHANGE COLUMN FNAME FIRSTNAME VARCHAR(30);
+```
+
+Rename `LNAME` → `LASTNAME`:
+```sql
+ALTER TABLE EMPLOYEES CHANGE COLUMN LNAME LASTNAME VARCHAR(30);
+```
+
+
+
+ DROP a Column
+
+Syntax: `ALTER TABLE table-name DROP COLUMN column-name;`
+
+```sql
+ALTER TABLE EMPLOYEES DROP COLUMN PFID;
+-- ALTER TABLE EMPLOYEES DROP COLUMN PFI;  -- typo → ERROR 1091 (42000): Can't DROP 'PFI'; check that column/key exists
+
+ALTER TABLE EMPLOYEES DROP COLUMN LOCATION;
+```
+
+
+
+ RENAME a Table
+
+Syntax: `ALTER TABLE table-name RENAME TO new-table-name;`
+
+```sql
+ALTER TABLE EMPLOYEES RENAME TO CODEGNAN_EMP;
+-- ... later renamed back:
+ALTER TABLE CODEGNAN_EMP RENAME TO EMPLOYEES;
+```
+
+`SHOW TABLES;` and `DESC table_name;` confirm the change — querying the old table name after a rename throws `ERROR 1146 (42S02): Table doesn't exist`.
+
+
+
+ Assignment: Part A — Create Table
+
+Create a table named `company_staff` with the following columns and constraints:
+
+| Column | Data Type |
+|---|---|
+| `emp_id` | `INT` (PRIMARY KEY) |
+| `age` | `TINYINT` |
+| `experience` | `SMALLINT` |
+| `gender` | `CHAR(1)` |
+| `emp_name` | `VARCHAR(50)` |
+| `address` | `TINYTEXT` |
+| `salary` | `DECIMAL(10,2)` |
+| `department` | `ENUM('HR','IT','Sales','Finance','Support')` |
+| `skills` | `SET('Java','Python','SQL','Excel','Communication')` |
+| `joining_date` | `DATE` |
+
+```sql
+CREATE TABLE company_staff (
+    emp_id INT PRIMARY KEY,
+    age TINYINT,
+    experience SMALLINT,
+    gender CHAR(1),
+    emp_name VARCHAR(50),
+    address TINYTEXT,
+    salary DECIMAL(10,2),
+    department ENUM('HR','IT','Sales','Finance','Support'),
+    skills SET('Java','Python','SQL','Excel','Communication'),
+    joining_date DATE
+);
+```
+Then display the structure (`DESC company_staff;`) and list all tables (`SHOW TABLES;`).
+
+
+
+## Assignment: Part B — ALTER TABLE Questions
+
+**Q1. Add a New Column** — add `email`, max 100 characters.
+```sql
+ALTER TABLE company_staff
+ADD email VARCHAR(100);
+```
+
+**Q2. Add Phone Number Column** — add `phone_number` as `BIGINT`.
+```sql
+ALTER TABLE company_staff
+ADD phone_number BIGINT;
+```
+
+**Q3. Add Bonus Column After Salary** — add `bonus DECIMAL(8,2)`, placed right after `salary`.
+```sql
+ALTER TABLE company_staff
+ADD bonus DECIMAL(8,2) AFTER salary;
+```
+
+**Q4. Add Status Column After Department** — add `status VARCHAR(20)`, placed right after `department`.
+```sql
+ALTER TABLE company_staff
+ADD status VARCHAR(20) AFTER department;
+```
+
+**Q5. Add Company Name as the First Column** — add `company_name VARCHAR(50)` as the first column.
+```sql
+ALTER TABLE company_staff
+ADD company_name VARCHAR(50) FIRST;
+```
+
+**Q6. Add Qualification Column** — add `qualification VARCHAR(50)`, placed right after `emp_name`.
+```sql
+ALTER TABLE company_staff
+ADD qualification VARCHAR(50) AFTER emp_name;
+```
+
+**Q7. Modify Employee Name Column** — widen `emp_name` to 100 characters.
+```sql
+ALTER TABLE company_staff
+MODIFY emp_name VARCHAR(100);
+```
+
+**Q8. Modify Salary Column** — change `salary` to `DECIMAL(12,2)`.
+```sql
+ALTER TABLE company_staff
+MODIFY salary DECIMAL(12,2);
+```
+
+**Q9. Rename Employee Name Column** — rename `emp_name` to `employee_name`.
+```sql
+ALTER TABLE company_staff
+RENAME COLUMN emp_name TO employee_name;
+```
+
+**Q10. Rename Joining Date Column** — rename `joining_date` to `date_of_joining`.
+```sql
+ALTER TABLE company_staff
+RENAME COLUMN joining_date TO date_of_joining;
+```
+
+**Q11. Drop Bonus Column**
+```sql
+ALTER TABLE company_staff
+DROP COLUMN bonus;
+```
+
+**Q12. Drop Phone Number Column**
+```sql
+ALTER TABLE company_staff
+DROP COLUMN phone_number;
+```
+
+**Q13. Rename the Table** — rename `company_staff` to `staff_records`.
+```sql
+ALTER TABLE company_staff
+RENAME TO staff_records;
+```
+
+**Q14. Rename the Table Back** — rename `staff_records` back to `company_staff`.
+```sql
+ALTER TABLE staff_records
+RENAME TO company_staff;
+```
+
+**Q15. Add Last Updated Column** — add `last_updated DATE`, placed right after `skills`.
+```sql
+ALTER TABLE company_staff
+ADD last_updated DATE AFTER skills;
+```
