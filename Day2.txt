@@ -1,0 +1,238 @@
+ Day 2 — Data, Field, Record, Database & SQL Basics
+
+ What is Data?
+Raw facts or figures without context.
+Example: `101,Ravi,50000,hyd`
+
+ What is a Field?
+Smallest unit of data in a database (column/attribute).
+Example: `EmpName, EmpId, EmpSalary, EmpAddress`
+
+ What is a Record?
+Collection of related fields (row/tuple).
+Example: `(111, ravi, 60000, vjy)`
+
+ What is a Database?
+Organized collection of related records stored together.
+Example: An employee database containing all employee records.
+
+
+
+ Client-Server Architecture
+
+- **Client**: sends requests to the server and receives a response from it.
+- **Server**: software that takes requests from clients. If the request is valid, it generates a response and hands it back to the client; if invalid, it raises an error.
+- **Protocol**: a set of rules and regulations that governs how requests are sent from client to server.
+
+
+
+ SQL Identifiers
+
+SQL identifiers are names used to identify database objects such as database names, table names, column names, view names, index names, constraints, triggers, and stored procedures.
+
+Rules for declaring identifiers:
+1. Only allowed characters: `a-z`, `A-Z`, `0-9`, `_`, `$`
+2. Must begin with a letter or underscore (`_`)
+3. Cannot use reserved keywords
+4. Spaces are not allowed
+5. Identifiers are case sensitive
+6. Maximum length: 15 characters
+
+
+
+SQL Commands Overview
+
+SQL commands are broadly classified into five categories:
+
+| Command | Description |
+|---|---|
+| **DDL** | Data Definition Language — defines and modifies the structure of database objects (tables, schemas, indexes) |
+| **DML** | Data Manipulation Language — manages data stored within database objects (insert, update, delete) |
+| **DQL** | Data Query Language — used to fetch/retrieve data from the database |
+| **DCL** | Data Control Language — manages permissions and access control on database objects |
+| **TCL** | Transaction Control Language — manages transactions to maintain data integrity |
+
+ 1. DDL — Data Definition Language
+Used to define, create, alter, and remove the structure of database objects. Changes made are auto-committed and permanent.
+
+| Command | Description |
+|---|---|
+| `CREATE` | Creates a new database object (table, database, view, index, schema). e.g. `CREATE TABLE Students (ID INT, Name VARCHAR(50));` |
+| `ALTER` | Modifies the structure of an existing object, e.g. adding/deleting/modifying columns. e.g. `ALTER TABLE Students ADD Email VARCHAR(100);` |
+| `DROP` | Permanently deletes an existing database object along with all its data and structure. Cannot be rolled back in most databases. |
+| `TRUNCATE` | Removes all rows from a table quickly, keeping the structure intact. Faster than `DELETE` since it doesn't log individual row deletions. |
+| `RENAME` | Renames an existing database object without changing its structure or data. |
+| `COMMENT` | Adds explanatory notes to database objects for documentation; doesn't affect data or structure. |
+
+
+
+ Data Types
+
+ Numeric Data Types
+
+| Type | Description | Range |
+|---|---|---|
+| `TINYINT` | Very small integers | Signed: -128 to 127; Unsigned: 0 to 255 |
+| `SMALLINT` | Small integers | Signed: -32,768 to 32,767; Unsigned: 0 to 65,535 |
+| `MEDIUMINT` | Medium-sized integers | Signed: -8,388,608 to 8,388,607; Unsigned: 0 to 16,777,215 |
+| `INT` / `INTEGER` | Standard integers | Signed: -2,147,483,648 to 2,147,483,647; Unsigned: 0 to 4,294,967,295 |
+| `BIGINT` | Large integers | Signed: -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807; Unsigned: 0 to 18,446,744,073,709,551,615 |
+| `FLOAT` | Single-precision floating point | ≈ -3.402823466E+38 to 3.402823466E+38 |
+| `DOUBLE` | Double-precision floating point | ≈ -1.7976931348623157E+308 to 1.7976931348623157E+308 |
+| `DECIMAL(M,D)` | Fixed-point, exact precision (financial data). `M` = max digits, `D` = digits after decimal | — |
+
+Example:
+```sql
+CREATE TABLE tinyint_example (age TINYINT);
+INSERT INTO tinyint_example (age) VALUES (25);
+
+CREATE TABLE decimal_example (price DECIMAL(10, 2));
+INSERT INTO decimal_example (price) VALUES (1999.99);
+```
+
+ String and Binary Data Types
+
+| Type | Description |
+|---|---|
+| `CHAR(n)` | Fixed-length string; pads with spaces to length `n`. Max 255 chars. |
+| `VARCHAR(n)` | Variable-length string; more storage-efficient. Max 65,535 bytes. |
+| `BINARY(n)` | Fixed-length binary string; pads with `\0` if shorter. |
+| `VARBINARY(n)` | Variable-length binary string; no padding. |
+| `TEXT` | Large blocks of text, up to 65,535 characters. No default value; stored outside the row. |
+| `TINYTEXT` | Up to 255 characters |
+| `MEDIUMTEXT` | Up to 16,777,215 characters |
+| `LONGTEXT` | Up to 4,294,967,295 characters |
+| `ENUM` | Predefined list of values; stores only one chosen value. |
+| `SET` | Predefined list of values; can store multiple values as bits. |
+
+**CHAR vs VARCHAR**
+
+| Feature | CHAR(n) | VARCHAR(n) |
+|---|---|---|
+| Storage type | Fixed-length | Variable-length |
+| Padding | Pads with spaces to length n | No padding |
+| Storage size | Always n bytes (+1 if needed) | Actual length (+1–2 bytes for length prefix) |
+| Performance | Slightly faster for fixed-length data | More efficient for varying-length data |
+| Trailing spaces | Preserved/stored | Preserved but ignored in comparison |
+| Max length | 255 characters | 65,535 bytes (depends on row size/charset) |
+
+**BINARY vs VARBINARY**
+
+| Feature | BINARY(n) | VARBINARY(n) |
+|---|---|---|
+| Length | Fixed | Variable |
+| Padding | Pads with `\0` | No padding |
+| Max length | Up to 255 bytes (or more in later versions) | Same |
+| Use case | Consistent-length binary data | Varying-length binary data |
+
+Example:
+```sql
+CREATE TABLE example (code CHAR(5));
+INSERT INTO example (code) VALUES ('AB'), ('ABCDE');
+-- Output: 'AB   ', 'ABCDE' (padded to 5 characters if shorter)
+
+CREATE TABLE example2 (status ENUM('active', 'inactive', 'pending'));
+INSERT INTO example2 (status) VALUES ('active'), ('inactive');
+
+CREATE TABLE example3 (permissions SET('read', 'write', 'execute'));
+INSERT INTO example3 (permissions) VALUES ('read,write'), ('write,execute');
+```
+
+ Date and Time Data Types
+
+**DATE** — stores date only, format `'YYYY-MM-DD'`
+```sql
+CREATE TABLE Orders (
+    OrderId INT,
+    ProductName VARCHAR(255),
+    OrderDate DATE
+);
+
+INSERT INTO Orders (OrderId, ProductName, OrderDate)
+VALUES (1, 'Product 1', '2022-01-01');
+
+SELECT * FROM Orders WHERE OrderDate = '2022-01-01';
+```
+
+Date functions:
+```sql
+SELECT CURDATE();                                       -- current date
+SELECT DATE_ADD('2024-01-09', INTERVAL 3 MONTH);         -- add interval
+SELECT DATE_SUB('2024-01-09', INTERVAL 3 MONTH);         -- subtract interval
+SELECT DATEDIFF('2024-01-09', '2024-01-14');              -- difference between dates
+```
+
+**TIME** — stores hours, minutes, seconds, format `'HH:MI:SS'`
+```sql
+CREATE TABLE table_name (column_name TIME);
+INSERT INTO table_name (column_name) VALUES ('17:34:20');
+```
+
+Time functions:
+```sql
+SELECT CURTIME();                              -- current time
+SELECT ADDTIME('11:30:45', '15:30:45');        -- add time
+SELECT SUBTIME('11:30:45', '15:30:45');        -- subtract time
+```
+
+**TIMESTAMP** — stores both date and time, format `'YYYY-MM-DD HH:MI:SS'`. Typically used to track record updates.
+```sql
+CREATE TABLE table_name (
+    column1 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    column2 VARCHAR(100)
+);
+
+-- Auto-update on row change (MySQL):
+CREATE TABLE table_name (
+    column1 TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    column2 VARCHAR(100)
+);
+```
+
+
+
+ Practice Session
+
+```sql
+mysql> show databases;
++------------------------+
+| Database               |
++------------------------+
+| information_schema     |
+| jeevan_raksha_pharmacy |
+| mysql                  |
+| performance_schema     |
+| sys                    |
++------------------------+
+5 rows in set (0.08 sec)
+
+mysql> CREATE DATABASE PFS7;
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SHOW DATABASES;
++------------------------+
+| Database               |
++------------------------+
+| information_schema     |
+| jeevan_raksha_pharmacy |
+| mysql                  |
+| performance_schema     |
+| pfs3                   |
+| sys                    |
++------------------------+
+6 rows in set (0.00 sec)
+
+mysql> USE PFS7;
+Database changed
+
+mysql> CREATE TABLE EMPLOYEES(
+    -> EMPID CHAR(5),
+    -> FNAME VARCHAR(100),
+    -> LNAME VARCHAR(30),
+    -> AGE INT,
+    -> DOJ DATE,
+    -> ADDRESS TINYTEXT,
+    -> DEPT VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.27 sec)
+```
